@@ -1,0 +1,34 @@
+version: '3.9'
+
+services:
+    client:
+        container_name: meank-client
+        build: meank-client
+        ports:
+            - "4200:4200"
+        volumes:
+            - ./meank-client:/app
+    api:
+        container_name: meank-api
+        build: meank-api
+        command: npm run dev
+        ports:
+            - "3000:3000"
+        volumes:
+            - ./meank-api:/usr/src/app
+        links:
+            - database
+    database:
+        image: mongo:latest
+#        environment:
+#            - MONGO_INITDB_ROOT_USERNAME=devroot
+#            - MONGO_INITDB_ROOT_PASSWORD=devroot
+#            - MONGO_INITDB_DATABASE=meank
+        ports:
+            - "27017:27017"
+        container_name: database
+        volumes:
+            - shared_database:/data/db
+volumes:
+    shared_database:
+
